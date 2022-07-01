@@ -20,7 +20,7 @@ const deleteModal = (taskId, refetch, setRefetch) =>
     }
   });
 const handleDelete = (taskId, refetch, setRefetch) => {
-  fetch(`http://localhost:5000/delete-task/${taskId}`, {
+  fetch(`https://daily-tasks-itsproali.herokuapp.com/delete-task/${taskId}`, {
     method: "DELETE",
   })
     .then((res) => res.json())

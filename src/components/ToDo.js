@@ -17,7 +17,7 @@ const ToDo = ({ refetch, setRefetch }) => {
   //   Load Previous Tasks
   useEffect(() => {
     if (userId) {
-      fetch(`http://localhost:5000/tasks/${userId}`)
+      fetch(`https://daily-tasks-itsproali.herokuapp.com/tasks/${userId}`)
         .then((res) => res.json())
         .then((data) => setAllTasks(data));
     }
@@ -28,7 +28,7 @@ const ToDo = ({ refetch, setRefetch }) => {
     e.preventDefault();
     const inputValue = e.target.inputValue.value;
     if (inputValue && user) {
-      fetch("http://localhost:5000/add-task", {
+      fetch("https://daily-tasks-itsproali.herokuapp.com/add-task", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -51,7 +51,7 @@ const ToDo = ({ refetch, setRefetch }) => {
 
   // Complete a Task
   const handleCompleteTask = (taskId) => {
-    fetch(`http://localhost:5000/completed/${taskId}`, {
+    fetch(`https://daily-tasks-itsproali.herokuapp.com/completed/${taskId}`, {
       method: "PATCH",
     })
       .then((res) => res.json())
@@ -60,12 +60,12 @@ const ToDo = ({ refetch, setRefetch }) => {
 
   // Edit a Task
   const handleEditTask = (taskId, details) => {
-    fetch(`http://localhost:5000/update-task/${taskId}`, {
+    fetch(`https://daily-tasks-itsproali.herokuapp.com/update-task/${taskId}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify({details}),
+      body: JSON.stringify({ details }),
     })
       .then((res) => res.json())
       .then((data) => setRefetch(!refetch));
