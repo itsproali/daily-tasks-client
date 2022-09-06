@@ -12,16 +12,14 @@ const Completed = ({ refetch, setRefetch }) => {
 
   // Load All Completed Task
   useEffect(() => {
-    fetch(
-      `https://daily-tasks-itsproali.herokuapp.com/completed-task/${userId}`
-    )
+    fetch(`https://daily-task-server.onrender.com/completed-task/${userId}`)
       .then((res) => res.json())
       .then((data) => setCompletedTasks(data));
   }, [refetch, userId]);
 
   // UnComplete a Task
   const handleUnCompleteTask = (taskId) => {
-    fetch(`https://daily-tasks-itsproali.herokuapp.com/un-complete/${taskId}`, {
+    fetch(`https://daily-task-server.onrender.com/un-complete/${taskId}`, {
       method: "PATCH",
     })
       .then((res) => res.json())

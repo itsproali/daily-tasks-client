@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import "./shared.css";
 import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import { MdPlaylistAdd } from "react-icons/md";
@@ -7,28 +7,32 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../firebase-init";
 import Loading from "./Loading";
 import deleteModal from "../hooks/useDelete";
+import { useDispatch, useSelector } from "react-redux";
+import SetTodoAction from "../states/Action/SetTodoAction";
 
 const ToDo = ({ refetch, setRefetch }) => {
   const [user, userLoading] = useAuthState(auth);
   const userId = user?.uid;
-  console.log(userId);
-  const [allTasks, setAllTasks] = useState("");
+  const dispatch = useDispatch();
+  const { todo } = useSelector((state) => state.Todo);
 
   //   Load Previous Tasks
   useEffect(() => {
     if (userId) {
-      fetch(`https://daily-tasks-itsproali.herokuapp.com/tasks/${userId}`)
+      fetch(`https://daily-task-server.onrender.com/tasks/${userId}`)
         .then((res) => res.json())
-        .then((data) => setAllTasks(data));
+        .then((data) => {
+          dispatch(SetTodoAction(data));
+        });
     }
-  }, [refetch, userId]);
+  }, [refetch, userId, dispatch]);
 
   // Add New Task
   const handleAddTask = (e) => {
     e.preventDefault();
     const inputValue = e.target.inputValue.value;
     if (inputValue && user) {
-      fetch("https://daily-tasks-itsproali.herokuapp.com/add-task", {
+      fetch("https://daily-task-server.onrender.com/add-task", {
         method: "POST",
         headers: {
           "content-type": "application/json",
@@ -37,7 +41,6 @@ const ToDo = ({ refetch, setRefetch }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setRefetch(!refetch);
           e.target.inputValue.value = "";
         });
@@ -51,7 +54,7 @@ const ToDo = ({ refetch, setRefetch }) => {
 
   // Complete a Task
   const handleCompleteTask = (taskId) => {
-    fetch(`https://daily-tasks-itsproali.herokuapp.com/completed/${taskId}`, {
+    fetch(`https://daily-task-server.onrender.com/completed/${taskId}`, {
       method: "PATCH",
     })
       .then((res) => res.json())
@@ -60,7 +63,7 @@ const ToDo = ({ refetch, setRefetch }) => {
 
   // Edit a Task
   const handleEditTask = (taskId, details) => {
-    fetch(`https://daily-tasks-itsproali.herokuapp.com/update-task/${taskId}`, {
+    fetch(`https://daily-task-server.onrender.com/update-task/${taskId}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -75,6 +78,7 @@ const ToDo = ({ refetch, setRefetch }) => {
   if (userLoading) {
     return <Loading />;
   }
+
   return (
     <div className="py-12 px-2 md:px-12 bg-sky-50 flex flex-col md:flex-row">
       <div className="mb-8 md:mb-0 md:mr-8 w-full">
@@ -113,9 +117,9 @@ const ToDo = ({ refetch, setRefetch }) => {
       </div>
       <div className="bg-white rounded-lg py-8 px-3 md:px-6 shadow-lg w-full">
         <h1 className="text-center text-2xl text-primary mb-6">To-Do List</h1>
-        {allTasks &&
+        {todo &&
           user &&
-          allTasks.map((task) => (
+          todo.map((task) => (
             <div
               className="flex items-center justify-between bg-gray-50 hover:bg-gray-100 rounded-lg my-4 p-4 shadow duration-300"
               key={task._id}

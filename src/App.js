@@ -9,15 +9,31 @@ import Register from "./components/Register";
 import Loading from "./components/Loading";
 import NotFound from "./components/NotFound";
 import Footer from "./components/Footer";
+import RequireUser from "./hooks/RequireUser";
+import { useState } from "react";
 
 function App() {
+  const [refetch, setRefetch] = useState(false);
   return (
     <>
       <Navbar></Navbar>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/completed" element={<Completed />}></Route>
-        <Route path="/to-do" element={<ToDo />}></Route>
+        <Route
+          path="/"
+          element={
+            <RequireUser>
+              <Home refetch={refetch} setRefetch={setRefetch} />
+            </RequireUser>
+          }
+        ></Route>
+        <Route
+          path="/completed"
+          element={<Completed refetch={refetch} setRefetch={setRefetch} />}
+        ></Route>
+        <Route
+          path="/to-do"
+          element={<ToDo refetch={refetch} setRefetch={setRefetch} />}
+        ></Route>
         <Route path="/calendar" element={<Days />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>

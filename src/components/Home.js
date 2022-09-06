@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import ToDo from "./ToDo";
 import Completed from "./Completed";
 
-const Home = () => {
-  const [refetch, setRefetch] = useState(false);
+const Home = ({ refetch, setRefetch }) => {
   return (
     <div>
       <ToDo refetch={refetch} setRefetch={setRefetch}></ToDo>

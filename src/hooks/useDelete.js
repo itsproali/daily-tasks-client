@@ -20,7 +20,7 @@ const deleteModal = (taskId, refetch, setRefetch) =>
     }
   });
 const handleDelete = (taskId, refetch, setRefetch) => {
-  fetch(`https://daily-tasks-itsproali.herokuapp.com/delete-task/${taskId}`, {
+  fetch(`https://daily-task-server.onrender.com/delete-task/${taskId}`, {
     method: "DELETE",
   })
     .then((res) => res.json())
